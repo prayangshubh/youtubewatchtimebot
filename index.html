@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Watchtime BOT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .col {
+            width: calc(33.33% - 20px);
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+            margin-bottom: 20px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            background-color: #333;
+            padding: 20px 0;
+            color: #fff;
+        }
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Watchtime BOT</h1>
+        <div class="form-group">
+            <label for="youtube-url">Enter YouTube URL:</label>
+            <input type="text" id="youtube-url" placeholder="Enter YouTube URL">
+        </div>
+        <div class="form-group">
+            <label for="num-windows">Number of Windows &amp; Play Button:</label>
+            <input type="number" id="num-windows" value="1">
+        </div>
+        <button onclick="embedVideos()">Embed Videos</button>
+
+        <div id="video-embeds"></div>
+    </div>
+
+    <footer>
+        <p>All Rights Reserved to Prayangshu</p>
+        <p>
+            <a href="https://web.facebook.com/prayangshubh/">Facebook</a> |
+            <a href="https://github.com/prayangshubh">Github</a> |
+            <a href="https://instagram.com/prayangshubh">Instagram</a>
+        </p>
+    </footer>
+
+    <script>
+        function embedVideos() {
+            var youtubeUrl = document.getElementById('youtube-url').value;
+            var numWindows = document.getElementById('num-windows').value;
+
+            var videoEmbeds = document.getElementById('video-embeds');
+            videoEmbeds.innerHTML = '';
+
+            // Extracting video ID from the YouTube URL
+            var videoId = extractVideoId(youtubeUrl);
+
+            var row;
+            for (var i = 0; i < numWindows; i++) {
+                // Create a new row for every third video
+                if (i % 3 === 0) {
+                    row = document.createElement('div');
+                    row.classList.add('row');
+                    videoEmbeds.appendChild(row);
+                }
+
+                var iframe = document.createElement('iframe');
+                iframe.width = '100%';
+                iframe.height = '315';
+                // Constructing the embed URL
+                iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1';
+                iframe.frameborder = '0';
+                iframe.allowfullscreen = true;
+
+                var videoContainer = document.createElement('div');
+                videoContainer.classList.add('col');
+                videoContainer.appendChild(iframe);
+
+                row.appendChild(videoContainer);
+            }
+        }
+
+        // Function to extract video ID from YouTube URL
+        function extractVideoId(url) {
+            var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            if (match && match[2].length === 11) {
+                return match[2];
+            } else {
+                alert('Invalid YouTube URL');
+                return '';
+            }
+        }
+    </script>
+</body>
+</html>
